@@ -3,9 +3,10 @@ import Footer from '../components/Footer';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../assets/styles.css';
 import axios from 'axios';
-import qs from "qs";
+import { useNavigate } from 'react-router-dom';
 
 const ContactUs = () => {
+  const navigate = useNavigate();
 
   const onPost = async (e) => {
     e.preventDefault();
@@ -13,10 +14,8 @@ const ContactUs = () => {
     param.append('username', e.target.username.value)
     param.append('email', e.target.email.value)
     param.append('phone', e.target.phone.value)
-    // const send = qs.stringify(e.target.username.value, e.target.email.value, e.target.phone.value)
-    await axios.post('http://localhost:3334/contact', param, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-    console.log('successs');
-
+    await axios.post('http://localhost:3334/contact', param.toString(), { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+    navigate('/data');
   }
 
   return (
@@ -34,7 +33,7 @@ const ContactUs = () => {
                   <Form.Control name='username' className='form-contact shadow-none' type="text" placeholder="Name" />
                 </div>
                 <div className='p-3'>
-                  <Form.Control name='email' className='form-contact shadow-none' type="text" placeholder="Email" />
+                  <Form.Control name='email' className='form-contact shadow-none' type="email" placeholder="Email" />
                 </div>
                 <div className='p-3'>
                   <Form.Control name='phone' className='form-contact shadow-none' type="text" placeholder="Phone Number" />
