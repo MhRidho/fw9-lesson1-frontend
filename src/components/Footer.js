@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Row, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default function ComFooter() {
+export default function Footer() {
   return (
     <div className='bgc-primary'>
       <Container className='pt-5 text-white'>

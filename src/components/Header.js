@@ -2,7 +2,7 @@ import { Col, Row, Container, Dropdown } from 'react-bootstrap'
 import { FiSearch, FiMenu } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
-export default function ComHeader() {
+export default function Header() {
   return (
     <Container>
       <Row className='justify-content-between mb-5 mt-md-3 gap-5 gap-md-0'>
@@ -21,12 +21,12 @@ export default function ComHeader() {
             <span>Contact Us</span>
           </Link>
           <Link to={'/'}>
-            <FiSearch size={23} stroke-width={3} />
+            <FiSearch size={23} strokeWidth={3} />
           </Link>
           <Link to={'/'}>
             <Dropdown>
               <Dropdown.Toggle id="dropdown-basic" className='bgc-unset border-0 c-black shadow-none p-0' bsPrefix='p-0'>
-                <span className='font-weight-mokuzai-700'><FiMenu size={30} stroke-width={3} /></span>
+                <span className='font-weight-mokuzai-700'><FiMenu size={30} strokeWidth={3} /></span>
               </Dropdown.Toggle>
               <Dropdown.Menu variant="dark" className='rounded-0' align='end'>
                 <Dropdown.Item><Link href={'#'}>Chat</Link></Dropdown.Item>

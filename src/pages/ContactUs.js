@@ -2,8 +2,23 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../assets/styles.css';
+import axios from 'axios';
+import qs from "qs";
 
-const TrackingUpdate = () => {
+const ContactUs = () => {
+
+  const onPost = async (e) => {
+    e.preventDefault();
+    const param = new URLSearchParams();
+    param.append('username', e.target.username.value)
+    param.append('email', e.target.email.value)
+    param.append('phone', e.target.phone.value)
+    // const send = qs.stringify(e.target.username.value, e.target.email.value, e.target.phone.value)
+    await axios.post('http://localhost:3334/contact', param, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+    console.log('successs');
+
+  }
+
   return (
     <>
       <Header />
@@ -14,15 +29,15 @@ const TrackingUpdate = () => {
               <p>Say hi to the team</p>
               <h1>Contact Us</h1>
               <p>Feel free to contact us and we will get<br /> back to you as soon as we can</p>
-              <Form noValidate className='d-flex flex-column gap-3 mt-4 justify-content-center'>
+              <Form onSubmit={onPost} className='d-flex flex-column gap-3 mt-4 justify-content-center'>
                 <div className='bg-white p-3'>
-                  <Form.Control name='email' className='form-contact shadow-none' type="text" placeholder="Name" />
+                  <Form.Control name='username' className='form-contact shadow-none' type="text" placeholder="Name" />
                 </div>
                 <div className='p-3'>
-                  <Form.Control name='address' className='form-contact shadow-none' type="text" placeholder="Email" />
+                  <Form.Control name='email' className='form-contact shadow-none' type="text" placeholder="Email" />
                 </div>
                 <div className='p-3'>
-                  <Form.Control name='address' className='form-contact shadow-none' type="text" placeholder="Phone Number" />
+                  <Form.Control name='phone' className='form-contact shadow-none' type="text" placeholder="Phone Number" />
                 </div>
                 <div className="d-grid gap-3 mt-4">
                   <Button type='submit' className='rounded-0 border-0 p-3 my-2' variant="secondary" size="lg">
@@ -55,4 +70,4 @@ const TrackingUpdate = () => {
   )
 }
 
-export default TrackingUpdate;
+export default ContactUs;
