@@ -4,3 +4,23 @@
   border-radius: unset !important;
   background-color: transparent !important;
 }
+
+.decor-none {
+  text-decoration: none;
+}
+
+.bg-color-dark {
+  background-color: #181818;
+}
+
+.color-7F8487 {
+  color: #7F8487;
+}
+
+.fs-14px {
+  font-size: 14px;
+}
+
+.fs-48px {
+  font-size: 68px;
+}
