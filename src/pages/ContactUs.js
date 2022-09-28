@@ -14,6 +14,7 @@ const ContactUs = () => {
     param.append('username', e.target.username.value)
     param.append('email', e.target.email.value)
     param.append('phone', e.target.phone.value)
+    param.append('message', e.target.message.value)
     await axios.post('http://localhost:3334/contact', param.toString(), { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
     navigate('/data');
   }
@@ -38,6 +39,9 @@ const ContactUs = () => {
                 <div className='p-3'>
                   <Form.Control name='phone' className='form-contact shadow-none text-white' type="text" placeholder="Phone Number" />
                 </div>
+                <div className='p-3'>
+                  <Form.Control name='message' className='form-contact shadow-none text-white' type="text" placeholder="Message" />
+                </div>
                 <div className="d-grid gap-3 mt-4">
                   <Button type='submit' className='rounded-0 border-0 p-3 my-2 fw-bold' variant="secondary" size="lg">
                     send
@@ -46,7 +50,7 @@ const ContactUs = () => {
               </Form>
             </Row>
           </Col>
-          <Col className='ps-5 pt-5 mt-sm-5'>
+          <Col className='ps-5 pt-5 mt-sm-5 ms-5'>
             <h5 className='color-7F8487'>Opening Hours</h5>
             <p className='text-white'>Monday - Friday</p>
             <p className='text-white'>9am - 5pm</p>

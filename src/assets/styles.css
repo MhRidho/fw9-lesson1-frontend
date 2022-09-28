@@ -24,3 +24,11 @@
 .fs-48px {
   font-size: 68px;
 }
+
+.hover-unset:hover {
+  background-color: unset !important;
+}
+
+.pointer {
+  cursor: pointer;
+}

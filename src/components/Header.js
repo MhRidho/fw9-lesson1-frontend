@@ -24,15 +24,15 @@ export default function Header() {
           <Link to={'/'} className='text-white'>
             <FiSearch size={23} strokeWidth={3} />
           </Link>
-          <Link to={'/'}>
+          <Link to={''}>
             <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic" className='bgc-unset border-0 c-black shadow-none p-0' bsPrefix='p-0'>
-                <span className='font-weight-mokuzai-700'><FiMenu size={30} strokeWidth={3} /></span>
+              <Dropdown.Toggle id="dropdown-basic" className='bg-color-dark border-0 hover-unset' bsPrefix='p-0'>
+                <span><FiMenu size={30} strokeWidth={3} /></span>
               </Dropdown.Toggle>
-              <Dropdown.Menu variant="dark" className='rounded-0 p-3' drop='start' id='dropdown-button-drop-start'>
-                <Dropdown.Item><Link to={'/login'} className='decor-none'>Login</Link></Dropdown.Item>
-                <Dropdown.Item><Link to={'/register'} className='decor-none'>Register</Link></Dropdown.Item>
-                <Dropdown.Item><Link to={'/logout'} className='decor-none'>Logout</Link></Dropdown.Item>
+              <Dropdown.Menu variant="dark" className='rounded-0 p-3' drop='start'>
+                <Dropdown.Item><Link to={'/login'} className='decor-none text-white'>Login</Link></Dropdown.Item>
+                <Dropdown.Item><Link to={'/register'} className='decor-none text-white'>Register</Link></Dropdown.Item>
+                <Dropdown.Item><Link to={'/logout'} className='decor-none text-white'>Logout</Link></Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Link>
