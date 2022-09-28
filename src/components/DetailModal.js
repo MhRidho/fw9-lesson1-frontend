@@ -5,10 +5,16 @@ import { Button, Modal, Form } from 'react-bootstrap';
 const DetailModal = (props) => {
   const [data, setData] = useState({});
 
-  useEffect(() => {
-    axios.get('http://localhost:3334/contact/13').then(({ data }) => {
+  const getDataDetail = (id) => {
+    id = parseInt(id);
+    const query = new URLSearchParams({ id }).toString();
+    axios.get('http://localhost:3334/contact?' + query).then(({ data }) => {
       setData(data.results);
     })
+  }
+
+  useEffect(() => {
+    getDataDetail();
   }, []);
 
   console.log(data);

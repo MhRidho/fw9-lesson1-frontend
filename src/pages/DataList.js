@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { Button, Col, Container, Row, Table, Form, ButtonGroup, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import { FiDelete, FiEdit, FiFolder, FiSearch } from 'react-icons/fi';
 import DetailModal from '../components/DetailModal';
 import EditModal from '../components/EditModal';
 import DeleteModal from '../components/DeleteModal';
+import { useNavigate } from 'react-router-dom';
 
 const DataList = () => {
+  const navigate = useNavigate();
   const [modalShowDetail, setModalShowDetail] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [modalShow2, setModalShow2] = useState(false);
+  const [modalShow2, setModalShowDelete] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [order, setOrder] = useState('ASC');
   const [data, setData] = useState([]);
   const [pageInfo, setPageInfo] = useState({});
+
+  const onDetail = () => {
+    navigate('/contact-detail');
+  }
 
   const sorting = (col) => {
     if (order === 'ASC') {
@@ -103,10 +108,10 @@ const DataList = () => {
                       <td>{element.email}</td>
                       <td>{element.phone}</td>
                       <td>
-                        <div className='d-flex justify-content-center'>
-                          <Button variant='secondary' className='me-2' onClick={() => setModalShowDetail(true)}><FiFolder size={20} strokeWidth={3} /></Button>
-                          <Button className='me-2' onClick={() => setModalShow(true)}><FiEdit size={20} strokeWidth={3} /></Button>
-                          <Button variant='danger' onClick={() => setModalShow2(true)}><FiDelete size={20} strokeWidth={3} /></Button>
+                        <div className='d-flex gap-1 justify-content-center'>
+                          <Button title='detail' variant='light' className='me-2' onClick={onDetail}><FiFolder size={20} strokeWidth={3} /></Button>
+                          <Button title='edit' className='me-2' variant='light' onClick={() => setModalShow(true)}><FiEdit size={20} strokeWidth={3} /></Button>
+                          <Button title='delete' variant='light' onClick={() => setModalShowDelete(true)}><FiDelete size={20} strokeWidth={3} /></Button>
                         </div>
                       </td>
                     </tr>
@@ -121,29 +126,37 @@ const DataList = () => {
                 />
                 <DeleteModal
                   show={modalShow2}
-                  onHide={() => setModalShow2(false)}
+                  onHide={() => setModalShowDelete(false)}
                 />
               </tbody>
             </Table>
-            <ButtonGroup aria-label="Basic example">
-              <div className='d-flex gap-3'>
-                <Button variant="primary" onClick={() => getData(pageInfo.limit, pageInfo.prevPage)} disabled={pageInfo.currentPage < 2}>Prev</Button>
-                <div className='d-flex align-items-center'>{pageInfo.currentPage}</div>
-                <Button variant="primary" onClick={() => getData(pageInfo.limit, pageInfo.nextPage)} disabled={pageInfo.totalPage === pageInfo.currentPage}>Next</Button>
-              </div>
-            </ButtonGroup>
+            <div className='d-flex justify-content-end'>
+              <ButtonGroup aria-label="Basic example">
+                <div className='d-flex gap-3'>
+                  <Button variant="secondary" onClick={() => getData(pageInfo.limit, pageInfo.prevPage)} disabled={pageInfo.currentPage < 2}>Prev</Button>
+                  <div className='d-flex align-items-center'><b>{pageInfo.currentPage}</b></div>
+                  <Button variant="secondary" onClick={() => getData(pageInfo.limit, pageInfo.nextPage)} disabled={pageInfo.totalPage === pageInfo.currentPage}>Next</Button>
+                </div>
+              </ButtonGroup>
+            </div>
             <br />
-            <select onChange={(e) => getData(e.target.value)} className='mt-3'>
-              <option value={1}>1</option>
-              <option value={2}>2</option>
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-            </select>
+            <Row>
+              <div className='d-flex justify-content-end'>
+                <Col md={1}>
+                  <Form.Select onChange={(e) => getData(e.target.value)} className='mt-3 shadow-none rounded-0'>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={pageInfo.totalData}>All Data {pageInfo.totalData}</option>
+                  </Form.Select>
+                </Col>
+              </div>
+            </Row>
           </Col>
         </Row>
       </Container>
-      <Footer />
     </>
   )
 }
