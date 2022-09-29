@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { Button, Col, Container, Row, Table, Form, ButtonGroup, InputGroup } from 'react-bootstrap';
+import { Button, Col, Container, Row, Table, Form, ButtonGroup, InputGroup, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { FiDelete, FiEdit, FiFolder, FiSearch } from 'react-icons/fi';
 import DetailModal from '../components/DetailModal';
@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router-dom';
 
 const DataList = () => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedId, setSelectedId] = useState('')
   const [modalShowDetail, setModalShowDetail] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [modalShow2, setModalShowDelete] = useState(false);
@@ -47,6 +49,21 @@ const DataList = () => {
       setData(data.results);
       setPageInfo(data.pageInfo);
     })
+  }
+
+  const toogleModal = () => {
+    setShowModal(!showModal);
+  }
+
+  const confirmDelete = (id) => {
+    toogleModal();
+    setSelectedId(id);
+  }
+
+  const deleteData = async () => {
+    const deleted = await axios.delete('http://localhost:3334/contact/' + selectedId);
+    toogleModal();
+    getData();
   }
 
   useEffect(() => {
@@ -111,7 +128,7 @@ const DataList = () => {
                         <div className='d-flex gap-1 justify-content-center'>
                           <Button title='detail' variant='light' className='me-2' onClick={onDetail}><FiFolder size={20} strokeWidth={3} /></Button>
                           <Button title='edit' className='me-2' variant='light' onClick={() => setModalShow(true)}><FiEdit size={20} strokeWidth={3} /></Button>
-                          <Button title='delete' variant='light' onClick={() => setModalShowDelete(true)}><FiDelete size={20} strokeWidth={3} /></Button>
+                          <Button title='delete' variant='light' onClick={() => confirmDelete(element.id)}><FiDelete size={20} strokeWidth={3} /></Button>
                         </div>
                       </td>
                     </tr>
@@ -157,6 +174,28 @@ const DataList = () => {
           </Col>
         </Row>
       </Container>
+      <Modal
+        show={showModal}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Delete Data
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <span>Are You Sure to delete data</span>
+          <Form className='d-flex flex-column gap-3 mt-4 justify-content-center'>
+            <div className="d-grid gap-3 mt-4">
+              <Button onClick={deleteData} className='border-0 p-2 my-2 fw-bold' variant="danger" size="lg">
+                Yes
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={toogleModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
