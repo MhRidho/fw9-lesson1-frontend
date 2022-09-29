@@ -11,7 +11,7 @@ const contact = createSlice({
   name: 'contact',
   initialState,
   reducers: {
-    toogleModal: (state) => {
+    toggleModal: (state) => {
       state.deleteModal = !state.deleteModal
     }
   },
@@ -27,6 +27,6 @@ const contact = createSlice({
   }
 });
 
-export { getAllContact };
+export const { toggleModal } = contact.actions;
 
 export default contact.reducer

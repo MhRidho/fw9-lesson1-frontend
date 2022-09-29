@@ -8,3 +8,9 @@ export const getAllContact = createAsyncThunk('contact/getAllContact', async ({ 
   const { data } = await axios.get('http://localhost:3334/contact?' + query);
   return data;
 });
+
+export const deleteContact = createAsyncThunk('contact/deleteContact', async ({ id, cb }) => {
+  const { data } = await axios.get('http://localhost:3334/contact/' + id);
+  cb();
+  return 0;
+});

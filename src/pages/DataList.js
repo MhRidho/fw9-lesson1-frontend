@@ -8,68 +8,54 @@ import EditModal from '../components/EditModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllContact } from '../redux/action/contact';
+import { toggleModal } from '../redux/reducer/contact';
 
 const DataList = () => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const contact = useSelector(state => state.contact.table);
   const contactInfo = useSelector(state => state.contact.tableInfo);
+  const showModal = useSelector(state => state.contact.deleteModal);
 
-  const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState('')
   const [modalShowDetail, setModalShowDetail] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [order, setOrder] = useState('ASC');
-  const [data, setData] = useState([]);
-  const [pageInfo, setPageInfo] = useState({});
 
   const onDetail = () => {
     navigate('/contact-detail');
   }
 
-  const sorting = (col) => {
-    if (order === 'ASC') {
-      const sorted = [...contact].sort((a, b) =>
-        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
-      );
-      setData(sorted);
-      setOrder('DSC');
-    }
-    if (order === 'DSC') {
-      const sorted = [...contact].sort((a, b) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
-      );
-      setData(sorted);
-      setOrder('ASC');
-    }
-  };
-
-  const getData = (limit = 5, page = 1) => {
-    limit = parseInt(limit);
-    page = parseInt(page);
-    const query = new URLSearchParams({ limit, page }).toString();
-    axios.get('http://localhost:3334/contact?' + query).then(({ data }) => {
-      setData(data.results);
-      setPageInfo(data.pageInfo);
-    })
-  }
-
-  const toogleModal = () => {
-    setShowModal(!showModal);
-  }
+  // const sorting = (col) => {
+  //   if (order === 'ASC') {
+  //     const sorted = [...contact].sort((a, b) =>
+  //       a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+  //     );
+  //     setData(sorted);
+  //     setOrder('DSC');
+  //   }
+  //   if (order === 'DSC') {
+  //     const sorted = [...contact].sort((a, b) =>
+  //       a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+  //     );
+  //     setData(sorted);
+  //     setOrder('ASC');
+  //   }
+  // };
 
   const confirmDelete = (id) => {
-    toogleModal();
+    dispatch(toggleModal());
     setSelectedId(id);
   }
 
   const deleteData = async () => {
-    const deleted = await axios.delete('http://localhost:3334/contact/' + selectedId);
-    toogleModal();
-    getData();
+    const { data } = await axios.delete('http://localhost:3334/contact/' + selectedId);
+    if (data.success) {
+      dispatch(toggleModal());
+      dispatch(getAllContact({}));
+    }
   }
 
   useEffect(() => {
@@ -98,9 +84,12 @@ const DataList = () => {
               <thead>
                 <tr className='pointer'>
                   <th>No</th>
-                  <th onClick={() => sorting('username')}>Username</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  {/* <th onClick={() => sorting('username')}>Username</th>
                   <th onClick={() => sorting('email')}>Email</th>
-                  <th onClick={() => sorting('phone')}>Phone Number</th>
+                  <th onClick={() => sorting('phone')}>Phone Number</th> */}
                   <th className='text-center'>Action</th>
                 </tr>
               </thead>
@@ -188,14 +177,14 @@ const DataList = () => {
           <span>Are You Sure to delete data</span>
           <Form className='d-flex flex-column gap-3 mt-4 justify-content-center'>
             <div className="d-grid gap-3 mt-4">
-              <Button onClick={deleteData} className='border-0 p-2 my-2 fw-bold' variant="danger" size="lg">
+              <Button className='border-0 p-2 my-2 fw-bold' variant="danger" size="lg" onClick={deleteData}>
                 Yes
               </Button>
             </div>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={toogleModal}>Close</Button>
+          <Button onClick={() => dispatch(toggleModal())}>Close</Button>
         </Modal.Footer>
       </Modal>
     </>
