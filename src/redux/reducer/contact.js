@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getContact } from '../action/contact';
+import { getAllContact } from '../action/contact';
 
 const initialState = {
   table: [],
@@ -16,12 +16,17 @@ const contact = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getContact.fulfilled, (state, action) => {
+    builder.addCase(getAllContact.pending, (state) => {
+      state.table = []
+      state.tableInfo = {}
+    });
+    builder.addCase(getAllContact.fulfilled, (state, action) => {
       state.table = action.payload.results
-      state.tableInfo = action.payload.results
+      state.tableInfo = action.payload.pageInfo
     })
   }
 });
 
+export { getAllContact };
 
 export default contact.reducer

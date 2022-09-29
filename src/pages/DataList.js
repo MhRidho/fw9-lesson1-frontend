@@ -5,16 +5,22 @@ import axios from 'axios';
 import { FiDelete, FiEdit, FiFolder, FiSearch } from 'react-icons/fi';
 import DetailModal from '../components/DetailModal';
 import EditModal from '../components/EditModal';
-import DeleteModal from '../components/DeleteModal';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllContact } from '../redux/action/contact';
 
 const DataList = () => {
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const contact = useSelector(state => state.contact.table);
+  const contactInfo = useSelector(state => state.contact.tableInfo);
+
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState('')
   const [modalShowDetail, setModalShowDetail] = useState(false);
   const [modalShow, setModalShow] = useState(false);
-  const [modalShow2, setModalShowDelete] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [order, setOrder] = useState('ASC');
   const [data, setData] = useState([]);
@@ -26,14 +32,14 @@ const DataList = () => {
 
   const sorting = (col) => {
     if (order === 'ASC') {
-      const sorted = [...data].sort((a, b) =>
+      const sorted = [...contact].sort((a, b) =>
         a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
       );
       setData(sorted);
       setOrder('DSC');
     }
     if (order === 'DSC') {
-      const sorted = [...data].sort((a, b) =>
+      const sorted = [...contact].sort((a, b) =>
         a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
       setData(sorted);
@@ -67,7 +73,7 @@ const DataList = () => {
   }
 
   useEffect(() => {
-    getData();
+    dispatch(getAllContact({}));
   }, [])
   return (
     <>
@@ -99,7 +105,7 @@ const DataList = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.length < 1 ?
+                {contact.length < 1 ?
                   (
                     <tr>
                       <td style={{ height: 200 }} colSpan={5}>
@@ -111,7 +117,7 @@ const DataList = () => {
                   )
                   :
                   // eslint-disable-next-line array-callback-return
-                  data.filter((element) => {
+                  contact.filter((element) => {
                     // eslint-disable-next-line eqeqeq
                     if (searchTerm == '') {
                       return element
@@ -141,18 +147,14 @@ const DataList = () => {
                   show={modalShow}
                   onHide={() => setModalShow(false)}
                 />
-                <DeleteModal
-                  show={modalShow2}
-                  onHide={() => setModalShowDelete(false)}
-                />
               </tbody>
             </Table>
             <div className='d-flex justify-content-end'>
               <ButtonGroup aria-label="Basic example">
                 <div className='d-flex gap-3'>
-                  <Button variant="secondary" onClick={() => getData(pageInfo.limit, pageInfo.prevPage)} disabled={pageInfo.currentPage < 2}>Prev</Button>
-                  <div className='d-flex align-items-center'><b>{pageInfo.currentPage}</b></div>
-                  <Button variant="secondary" onClick={() => getData(pageInfo.limit, pageInfo.nextPage)} disabled={pageInfo.totalPage === pageInfo.currentPage}>Next</Button>
+                  <Button variant="secondary" onClick={() => dispatch(getAllContact({ limit: contactInfo.limit, page: contactInfo.prevPage }))} disabled={contactInfo.currentPage < 2}>Prev</Button>
+                  <div className='d-flex align-items-center'><b>{contactInfo.currentPage}</b></div>
+                  <Button variant="secondary" onClick={() => dispatch(getAllContact({ limit: contactInfo.limit, page: contactInfo.nextPage }))} disabled={contactInfo.totalPage === contactInfo.currentPage}>Next</Button>
                 </div>
               </ButtonGroup>
             </div>
@@ -160,13 +162,13 @@ const DataList = () => {
             <Row>
               <div className='d-flex justify-content-end'>
                 <Col md={1}>
-                  <Form.Select onChange={(e) => getData(e.target.value)} className='mt-3 shadow-none rounded-0'>
+                  <Form.Select onChange={(e) => dispatch(getAllContact({ limit: e.target.value }))} className='mt-3 shadow-none rounded-0'>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={4}>4</option>
                     <option value={5}>5</option>
-                    <option value={pageInfo.totalData}>All Data {pageInfo.totalData}</option>
+                    <option value={contactInfo.totalData}>All Data {contactInfo.totalData}</option>
                   </Form.Select>
                 </Col>
               </div>
