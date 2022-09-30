@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import { Button, Col, Container, Row, Table, Form, ButtonGroup, InputGroup, Modal } from 'react-bootstrap';
+import { Button, Col, Container, Row, Table, Form, ButtonGroup, InputGroup, Modal, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { FiDelete, FiEdit, FiFolder, FiSearch } from 'react-icons/fi';
 import DetailModal from '../components/DetailModal';
@@ -11,6 +11,9 @@ import { getAllContact } from '../redux/action/contact';
 import { toggleModal, searchName } from '../redux/reducer/contact';
 
 const DataList = () => {
+  const successMsg = useSelector(state => state.contact.successMsg);
+  const errorMsg = useSelector(state => state.contact.errorMsg);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -99,6 +102,8 @@ const DataList = () => {
                 </InputGroup>
               </Col>
             </Row>
+            {successMsg && <Alert variant='success'>{successMsg}</Alert>}
+            {errorMsg && <Alert variant='danger'>{errorMsg}</Alert>}
             <Table striped bordered hover>
               <thead>
                 <tr className='pointer'>
