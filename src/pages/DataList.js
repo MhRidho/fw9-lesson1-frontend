@@ -9,10 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllContact } from '../redux/action/contact';
 import { toggleModal } from '../redux/reducer/contact';
+import { BeatLoader } from 'react-spinners';
 
 const DataList = () => {
   const successMsg = useSelector(state => state.contact.successMsg);
   const errorMsg = useSelector(state => state.contact.errorMsg);
+  const isLoading = useSelector(state => state.contact.isLoading);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -104,64 +106,88 @@ const DataList = () => {
             </Row>
             {successMsg && <Alert variant='success'>{successMsg}</Alert>}
             {errorMsg && <Alert variant='danger'>{errorMsg}</Alert>}
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr className='pointer'>
-                  <th>No</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                  <th>Phone Number</th>
-                  {/* <th onClick={() => sorting('username')}>Username</th>
+            {isLoading ? (
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr className='pointer'>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th className='text-center'>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ height: 200 }} colSpan={5}>
+                      <div className='d-flex justify-content-center align-items-center h-100'>
+                        <BeatLoader loading />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            ) : (
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr className='pointer'>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    {/* <th onClick={() => sorting('username')}>Username</th>
                   <th onClick={() => sorting('email')}>Email</th>
                   <th onClick={() => sorting('phone')}>Phone Number</th> */}
-                  <th className='text-center'>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {contact.length < 1 ?
-                  (
-                    <tr>
-                      <td style={{ height: 200 }} colSpan={5}>
-                        <div className='d-flex justify-content-center align-items-center h-100'>
-                          <b>No Data</b>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                  :
-                  // eslint-disable-next-line array-callback-return
-                  contact.filter((element) => {
-                    // eslint-disable-next-line eqeqeq
-                    if (searchTerm == '') {
-                      return element
-                    } else if (element.username.toLowerCase().includes(searchTerm.toLowerCase())) {
-                      return element
-                    }
-                  }).map(element => (
-                    <tr key={element.id}>
-                      <td>{element.id}</td>
-                      <td>{element.username}</td>
-                      <td>{element.email}</td>
-                      <td>{element.phone}</td>
-                      <td>
-                        <div className='d-flex gap-1 justify-content-center'>
-                          <Button title='detail' variant='light' className='me-2' onClick={onDetail}><FiFolder size={20} strokeWidth={3} /></Button>
-                          <Button title='edit' className='me-2' variant='light' onClick={() => setModalShow(true)}><FiEdit size={20} strokeWidth={3} /></Button>
-                          <Button title='delete' variant='light' onClick={() => confirmDelete(element.id)}><FiDelete size={20} strokeWidth={3} /></Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                <DetailModal
-                  show={modalShowDetail}
-                  onHide={() => setModalShowDetail(false)}
-                />
-                <EditModal
-                  show={modalShow}
-                  onHide={() => setModalShow(false)}
-                />
-              </tbody>
-            </Table>
+                    <th className='text-center'>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {contact.length < 1 ?
+                    (
+                      <tr>
+                        <td style={{ height: 200 }} colSpan={5}>
+                          <div className='d-flex justify-content-center align-items-center h-100'>
+                            <b>No Data</b>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                    :
+                    // eslint-disable-next-line array-callback-return
+                    contact.filter((element) => {
+                      // eslint-disable-next-line eqeqeq
+                      if (searchTerm == '') {
+                        return element
+                      } else if (element.username.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        return element
+                      }
+                    }).map(element => (
+                      <tr key={element.id}>
+                        <td>{element.id}</td>
+                        <td>{element.username}</td>
+                        <td>{element.email}</td>
+                        <td>{element.phone}</td>
+                        <td>
+                          <div className='d-flex gap-1 justify-content-center'>
+                            <Button title='detail' variant='light' className='me-2' onClick={onDetail}><FiFolder size={20} strokeWidth={3} /></Button>
+                            <Button title='edit' className='me-2' variant='light' onClick={() => setModalShow(true)}><FiEdit size={20} strokeWidth={3} /></Button>
+                            <Button title='delete' variant='light' onClick={() => confirmDelete(element.id)}><FiDelete size={20} strokeWidth={3} /></Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  <DetailModal
+                    show={modalShowDetail}
+                    onHide={() => setModalShowDetail(false)}
+                  />
+                  <EditModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
+                </tbody>
+              </Table>
+            )}
+
             <div className='d-flex justify-content-end'>
               <ButtonGroup aria-label="Basic example">
                 <div className='d-flex gap-3'>

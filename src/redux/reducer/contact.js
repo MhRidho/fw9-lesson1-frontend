@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createContact, getAllContact } from '../action/contact';
+import { createContact, getAllContact, editContact, getContactById } from '../action/contact';
 
 const initialState = {
   table: [],
@@ -9,6 +9,8 @@ const initialState = {
   sort: 'ASC',
   errorMsg: null,
   successMsg: null,
+  contactId: {},
+  isLoading: false,
 }
 
 const contact = createSlice({
@@ -29,11 +31,12 @@ const contact = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getAllContact.pending, (state) => {
-      state.table = []
+    builder.addCase(getAllContact.pending, (state, action) => {
+      state.isLoading = true
       state.tableInfo = {}
     });
     builder.addCase(getAllContact.fulfilled, (state, action) => {
+      state.isLoading = false
       state.table = action.payload.results
       state.tableInfo = action.payload.pageInfo
     })
@@ -45,10 +48,24 @@ const contact = createSlice({
       state.errorMsg = action.payload?.errorMsg;
       state.successMsg = action.payload?.successMsg;
     });
+    builder.addCase(getContactById.pending, (state) => {
+      state.contactId = {}
+    });
+    builder.addCase(getContactById.fulfilled, (state, action) => {
+      state.contactId = action.payload.results
+    });
+    builder.addCase(editContact.pending, (state) => {
+      state.errorMsg = null;
+      state.successMsg = null;
+    });
+    builder.addCase(editContact.fulfilled, (state, action) => {
+      state.errorMsg = action.payload?.errorMsg;
+      state.successMsg = action.payload?.successMsg;
+    });
   }
 });
 
-export { getAllContact, createContact };
+export { getAllContact, getContactById, createContact, editContact };
 
 export const { toggleModal, searchName, sortingColomn, sortingContact } = contact.actions;
 
