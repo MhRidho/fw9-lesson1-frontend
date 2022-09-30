@@ -4,20 +4,105 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../assets/styles.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { createContact } from '../redux/action/contact';
+import { useEffect } from 'react';
+
+const contactSchema = Yup.object().shape({
+  username: Yup.string().required(),
+  email: Yup.string().email('Invalid format email').required(),
+  phone: Yup.string().required(),
+  message: Yup.string().required(),
+});
+
+const ContactForm = (props) => {
+  return (
+    <Form onSubmit={props.handleSubmit} className='d-flex flex-column gap-3 mt-4 justify-content-center'>
+      <div className='p-3'>
+        <Form.Control
+          name='username'
+          value={props.values.username}
+          onChange={props.handleChange}
+          className='form-contact shadow-none text-white'
+          type="text"
+          placeholder="Name"
+          isInvalid={!!props.errors.username}
+        />
+        <Form.Control.Feedback type='invalid'>{props.errors.username}</Form.Control.Feedback>
+      </div>
+      <div className='p-3'>
+        <Form.Control
+          name='email'
+          value={props.values.email}
+          onChange={props.handleChange}
+          className='form-contact shadow-none text-white'
+          type="email"
+          placeholder="Email"
+          isInvalid={!!props.errors.email}
+        />
+        <Form.Control.Feedback type='invalid'>{props.errors.email}</Form.Control.Feedback>
+      </div>
+      <div className='p-3'>
+        <Form.Control
+          name='phone'
+          value={props.values.phone}
+          onChange={props.handleChange}
+          className='form-contact shadow-none text-white'
+          type="text"
+          placeholder="Phone Number"
+          isInvalid={!!props.errors.phone}
+        />
+        <Form.Control.Feedback type='invalid'>{props.errors.phone}</Form.Control.Feedback>
+      </div>
+      <div className='p-3'>
+        <Form.Control
+          name='message'
+          value={props.values.message}
+          onChange={props.handleChange}
+          className='form-contact shadow-none text-white'
+          type="text"
+          placeholder="Message"
+          isInvalid={!!props.errors.message}
+        />
+        <Form.Control.Feedback type='invalid'>{props.errors.message}</Form.Control.Feedback>
+      </div>
+      <div className="d-grid gap-3 mt-4">
+        <Button type='submit' className='rounded-0 border-0 p-3 my-2 fw-bold' variant="secondary" size="lg">
+          send
+        </Button>
+      </div>
+    </Form>
+  )
+}
 
 const ContactUs = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const success = useSelector(state => state.contact.successMsg);
 
-  const onPost = async (e) => {
-    e.preventDefault();
-    const param = new URLSearchParams();
-    param.append('username', e.target.username.value)
-    param.append('email', e.target.email.value)
-    param.append('phone', e.target.phone.value)
-    param.append('message', e.target.message.value)
-    await axios.post('http://localhost:3334/contact', param.toString(), { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
-    navigate('/data');
+  // const onPostContact = async (e) => {
+  //   e.preventDefault();
+  //   const param = new URLSearchParams();
+  //   param.append('username', e.target.username.value)
+  //   param.append('email', e.target.email.value)
+  //   param.append('phone', e.target.phone.value)
+  //   param.append('message', e.target.message.value)
+  //   await axios.post('http://localhost:3334/contact', param.toString(), { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+  //   navigate('/data');
+  // }
+
+  const onPostContact = (value) => {
+    const data = { username: value.username, email: value.email, phone: value.phone, message: value.message }
+    dispatch(createContact(data));
   }
+
+  useEffect(() => {
+    if (success) {
+      navigate('/data');
+    }
+  }, [navigate, success]);
 
   return (
     <>
@@ -29,25 +114,9 @@ const ContactUs = () => {
               <p className='text-white'>Say hi to the team</p>
               <h1 className='text-white fs-48px'>Contact Us</h1>
               <p className='text-white'>Feel free to contact us and we will get<br /> back to you as soon as we can</p>
-              <Form onSubmit={onPost} className='d-flex flex-column gap-3 mt-4 justify-content-center'>
-                <div className='p-3'>
-                  <Form.Control name='username' className='form-contact shadow-none text-white' type="text" placeholder="Name" />
-                </div>
-                <div className='p-3'>
-                  <Form.Control name='email' className='form-contact shadow-none text-white' type="email" placeholder="Email" />
-                </div>
-                <div className='p-3'>
-                  <Form.Control name='phone' className='form-contact shadow-none text-white' type="text" placeholder="Phone Number" />
-                </div>
-                <div className='p-3'>
-                  <Form.Control name='message' className='form-contact shadow-none text-white' type="text" placeholder="Message" />
-                </div>
-                <div className="d-grid gap-3 mt-4">
-                  <Button type='submit' className='rounded-0 border-0 p-3 my-2 fw-bold' variant="secondary" size="lg">
-                    send
-                  </Button>
-                </div>
-              </Form>
+              <Formik validationSchema={contactSchema} onSubmit={onPostContact} initialValues={{ username: '', email: '', phone: '', message: '' }}>
+                {(props) => <ContactForm {...props} />}
+              </Formik>
             </Row>
           </Col>
           <Col className='ps-5 pt-5 mt-sm-5 ms-5'>

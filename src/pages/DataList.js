@@ -8,7 +8,7 @@ import EditModal from '../components/EditModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllContact } from '../redux/action/contact';
-import { toggleModal } from '../redux/reducer/contact';
+import { toggleModal, searchName } from '../redux/reducer/contact';
 
 const DataList = () => {
   const navigate = useNavigate();
@@ -17,6 +17,8 @@ const DataList = () => {
   const contact = useSelector(state => state.contact.table);
   const contactInfo = useSelector(state => state.contact.tableInfo);
   const showModal = useSelector(state => state.contact.deleteModal);
+  const search = useSelector(state => state.contact.search);
+  const sorting = useSelector(state => state.contact.sort);
 
   const [selectedId, setSelectedId] = useState('')
   const [modalShowDetail, setModalShowDetail] = useState(false);
@@ -45,6 +47,23 @@ const DataList = () => {
   //   }
   // };
 
+  // const sortingTable = (col) => {
+  //   if (sorting === 'ASC') {
+  //     const sorted = [...contact].sort((a, b) =>
+  //       a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+  //     );
+  //     dispatch(sortingContact(sorted));
+  //     dispatch(sortingColomn('DESC'));
+  //   }
+  //   if (sorting === 'DESC') {
+  //     const sorted = [...contact].sort((a, b) =>
+  //       a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+  //     );
+  //     dispatch(sortingContact(sorted));
+  //     dispatch(sortingColomn('ASC'));
+  //   }
+  // }
+
   const confirmDelete = (id) => {
     dispatch(toggleModal());
     setSelectedId(id);
@@ -59,8 +78,8 @@ const DataList = () => {
   }
 
   useEffect(() => {
-    dispatch(getAllContact({}));
-  }, [])
+    dispatch(getAllContact({ search }));
+  }, [search])
   return (
     <>
       <Header />
@@ -71,7 +90,7 @@ const DataList = () => {
             <Row>
               <Col md={3}>
                 <InputGroup className="mb-4" size={20}>
-                  <Form.Control type='text' className='shadow-none rounded-0' placeholder='Search Username' onChange={e => { setSearchTerm(e.target.value) }} />
+                  <Form.Control type='text' name='search' className='shadow-none rounded-0' placeholder='Search Username' onChange={e => setSearchTerm(e.target.value)} />
                   <Button variant="outline-secondary" className='rounded-0'>
                     <div className='d-flex align-items-center fw-bold'>
                       <FiSearch />
