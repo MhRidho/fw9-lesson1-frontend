@@ -104,7 +104,7 @@ const DataList = () => {
             </Row>
             {successMsg && <Alert variant='success'>{successMsg}</Alert>}
             {errorMsg && <Alert variant='danger'>{errorMsg}</Alert>}
-            <Table striped bordered hover>
+            <Table striped bordered hover responsive>
               <thead>
                 <tr className='pointer'>
                   <th>No</th>
