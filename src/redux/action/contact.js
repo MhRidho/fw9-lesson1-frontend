@@ -6,7 +6,7 @@ export const createContact = createAsyncThunk('contact/createContact', async (re
   const result = {};
   try {
     const send = qs.stringify(request);
-    const { data } = await axios.post('http://localhost:3334/contact', send, {
+    const { data } = await axios.post('https://fw9-lesson1-backend-rho.vercel.app/contact', send, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded'
       }
@@ -24,12 +24,12 @@ export const getAllContact = createAsyncThunk('contact/getAllContact', async ({ 
   limit = parseInt(limit) || 5;
   page = parseInt(page) || 1;
   const query = new URLSearchParams({ limit, page }).toString()
-  const { data } = await axios.get('http://localhost:3334/contact?' + query);
+  const { data } = await axios.get('https://fw9-lesson1-backend-rho.vercel.app/contact?' + query);
   return data;
 });
 
 export const deleteContact = createAsyncThunk('contact/deleteContact', async ({ id, cb }) => {
-  const { data } = await axios.get('http://localhost:3334/contact/' + id);
+  const { data } = await axios.get('https://fw9-lesson1-backend-rho.vercel.app/contact/' + id);
   cb();
   return 0;
 });

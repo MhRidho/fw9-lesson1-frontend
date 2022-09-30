@@ -8,7 +8,7 @@ import EditModal from '../components/EditModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllContact } from '../redux/action/contact';
-import { toggleModal, searchName } from '../redux/reducer/contact';
+import { toggleModal } from '../redux/reducer/contact';
 
 const DataList = () => {
   const successMsg = useSelector(state => state.contact.successMsg);
@@ -73,7 +73,7 @@ const DataList = () => {
   }
 
   const deleteData = async () => {
-    const { data } = await axios.delete('http://localhost:3334/contact/' + selectedId);
+    const { data } = await axios.delete('https://fw9-lesson1-backend-rho.vercel.app/contact/' + selectedId);
     if (data.success) {
       dispatch(toggleModal());
       dispatch(getAllContact({}));

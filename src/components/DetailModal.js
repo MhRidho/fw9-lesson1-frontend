@@ -8,7 +8,7 @@ const DetailModal = (props) => {
   const getDataDetail = (id) => {
     id = parseInt(id);
     const query = new URLSearchParams({ id }).toString();
-    axios.get('http://localhost:3334/contact?' + query).then(({ data }) => {
+    axios.get('https://fw9-lesson1-backend-rho.vercel.app/contact?' + query).then(({ data }) => {
       setData(data.results);
     })
   }

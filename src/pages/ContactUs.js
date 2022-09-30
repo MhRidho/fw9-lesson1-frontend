@@ -2,7 +2,6 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import '../assets/styles.css';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
