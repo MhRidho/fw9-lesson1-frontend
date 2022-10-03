@@ -35,23 +35,6 @@ const DataList = () => {
     navigate('/contact-detail');
   }
 
-  // const sorting = (col) => {
-  //   if (order === 'ASC') {
-  //     const sorted = [...contact].sort((a, b) =>
-  //       a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
-  //     );
-  //     setData(sorted);
-  //     setOrder('DSC');
-  //   }
-  //   if (order === 'DSC') {
-  //     const sorted = [...contact].sort((a, b) =>
-  //       a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
-  //     );
-  //     setData(sorted);
-  //     setOrder('ASC');
-  //   }
-  // };
-
   // const sortingTable = (col) => {
   //   if (sorting === 'ASC') {
   //     const sorted = [...contact].sort((a, b) =>
